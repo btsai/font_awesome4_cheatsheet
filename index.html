@@ -37,6 +37,7 @@
     Originally from <a href="http://fortawesome.github.io/Font-Awesome/cheatsheet/" target="_blank">here</a>.
     All thanks go to Dave Gandy and crew.
     Code on <a href="https://github.com/btsai/font_awesome4_cheatsheet">github</a>.
+    <a href="https://github.com/btsai/font_awesome4_cheatsheet/archive/master.zip">Download</a> and use locally.
   </p>
 
   <div class="row">
@@ -1893,7 +1894,7 @@
   <label>Class:</label>
   <input type="text" class="classname" />
   <label>Search:</label>
-  <input type="text" class="search" />
+  <input type="search" class="search" />
   <label>Color:</label>
   <input type="text" class="color" />
   <i class="fa fa-question-circle help_icon">
@@ -1907,184 +1908,9 @@
   </i>
 </div>
 <!-- used to dynamically set color -->
-<style id="icon_color"></style>
+<style id="icon_color_style_tag"></style>
 <script type="text/javascript" src="assets/jquery-1.10.2.min.js"></script>
 <script type="text/javascript" src="assets/jquery.scrollTo.min.js"></script>
-<script type="text/javascript">
-  $(document).ready(function(){
-    var currentIndex,
-        currentIcon,
-        iconCSS = 'div.row div i.fa',
-        lastIndex = $(iconCSS).length - 1,
-        classNames = $('div.row span.classname'),
-        iconWrappers = $('div.row div.icon_wrapper'),
-        scrollTopOffset = 100,
-        scrollSpeed = 500,
-        hoverable = true;
-
-    function clearFoundIcon(){
-      if (currentIcon){
-        currentIcon.parents('div').removeClass('found');
-      }
-    }
-
-    function resetCurrentIndex(){
-      currentIndex = -1;
-    }
-
-    function reset(){
-      resetCurrentIndex();
-      clearFoundIcon();
-    }
-
-    function disableHover(){
-      hoverable = false;
-      iconWrappers.removeClass('hoverable');
-    }
-
-    function enableHover(){
-      hoverable = true;
-      iconWrappers.addClass('hoverable');
-    }
-
-    function scrollTo(icon){
-      // need to disable hover so that when the window is scrolling to the found icon, the mouseover events don't trigger the hover state
-      disableHover();
-      $(window).scrollTo(icon.offset().top - scrollTopOffset,
-                         scrollSpeed,
-                         {
-                          'axis':'y',
-                          onAfter:function(){
-                            // after finishing scrolling, allow hover, BUT don't set the hoverable class so that the mouse over another icon
-                            // doesn't trigger the hover state
-                            hoverable = true;
-                          }
-                         });
-    }
-
-    function forwardCollection(){
-      // add the first half to the second half so that it will loop to the first found icon when hitting enter
-      return $.makeArray(classNames.slice(currentIndex + 1))
-             .concat($.makeArray(classNames.slice(0, currentIndex + 1)));
-    }
-
-    function reverseCollection(){
-      // add the 2nd half to the first half so it will loop around
-      if (currentIndex <= 0){
-        currentIndex = lastIndex;
-      }
-      return $.makeArray(classNames.slice(0, currentIndex - 1)).reverse()
-             .concat($.makeArray(classNames.slice(currentIndex - 1)).reverse());
-    }
-
-    function matchIconName(text, searchReverse){
-      clearFoundIcon();
-      if (text.trim() == ''){
-        return
-      }
-
-      if (searchReverse){
-        var collection = reverseCollection();
-      }
-      else {
-        var collection = forwardCollection();
-      }
-      $.each(collection, function(){
-        var className = $(this).text();
-        if (className.match(new RegExp(text))){
-          currentIndex = classNames.index($(this));
-
-          $('input.classname').val(className);
-          currentIcon = $(this).prev(iconCSS);
-          currentIcon.parents('div').addClass('found');
-          scrollTo(currentIcon);
-
-          return false;
-        }
-      })
-    }
-
-    function findFirstMatching(text){
-      resetCurrentIndex();
-      matchIconName(text);
-    }
-
-    function findNextMatching(text){
-      if (currentIndex == null){
-        resetCurrentIndex();
-      }
-      matchIconName(text);
-    }
-
-    function findPrevMatching(text){
-      if (currentIndex == null){
-        resetCurrentIndex();
-      }
-      matchIconName(text, true);
-    }
-
-    // icon events
-    $(iconCSS).click(function(){
-      $('#search_bar input.classname').val('fa ' + $(this).next().html());
-    }).mouseover(function(){
-      // clear the currently selected icon when hovered
-      reset();
-    }).mousemove(function(){
-      // reenable hover if mouse moves over an icon, if in hoverable mode
-      if (hoverable){
-        enableHover();
-      }
-    })
-
-    // select the entire text when an input receives focus
-    $('#search_bar input').focus(function(){
-      $(this).select();
-    })
-
-    // color field events - set color on keyup
-    $('#search_bar input.color').keyup(function(){
-      var color = $(this).val();
-      if (!color.match(/#/)){
-        color = '#' + color;
-      }
-      $('#icon_color').html(iconCSS + '{ color: ' + color + '}');
-    })
-
-    // search field events
-    $('#search_bar input.search').focus(function(){
-      $(this).select();
-    }).keyup(function(event){
-      if (event.keyCode == 13) { // enter
-        if ($(this).val().length > 1) {
-          if (event.shiftKey){  // go backwards
-            findPrevMatching($(this).val());
-          }
-          else {  // go forwards
-            findNextMatching($(this).val());
-          }
-        }
-      }
-      else if (event.keyCode == 27) {   // escape
-        $('#search_bar input.search').val('');
-        reset();
-        scrollTo($(iconCSS).first());
-      }
-      else if ((event.keyCode >= 65 && event.keyCode <= 90) || event.keyCode == 8){  // a-z, backspace
-        if ($(this).val().trim() == '') {
-          reset();
-          scrollTo($(iconCSS).first());
-        }
-        else if ($(this).val().length > 1) {
-          findFirstMatching($(this).val());
-        }
-      }
-    })
-
-    // set initial focus in the search bar to start typing right away
-    $('.search_bar input.search').focus();
-
-  })
-</script>
-
+<script type="text/javascript" src="assets/icon_search.js"></script>
 </body>
 </html>

@@ -785,6 +785,9 @@ div.row div i {
 /***********************************
   selected icon styling - both mouseover and selected when searching (.found)
 ***********************************/
+div.row div.icon_wrapper.hidden {
+  display: none;
+}
 div.row div.icon_wrapper.hoverable:hover i.fa,
 div.row div.icon_wrapper.found i.fa {
   background-color: #FFFFD2;
