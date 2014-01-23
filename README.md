@@ -6,6 +6,8 @@ I also use this as a local version so I don't have to be online to look up the i
 
 This probably doesn't work on IE, but then, who develops on IE?
 
+Online at: http://btsai.github.io/font_awesome4_cheatsheet/index.html
+
 All of the fonts and css are from here:
 
 * http://fortawesome.github.io/Font-Awesome/cheatsheet/
