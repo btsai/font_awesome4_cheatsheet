@@ -152,6 +152,12 @@ $(document).ready(function(){
     }
   })
 
+  // classname field events
+  $('#search_bar input.classname').mouseup(function(event){
+    // need this to prevent losing selected state when mouse clicked in chrome
+    event.preventDefault();
+  })
+
   // global esc key to clear search field
   $(document).keyup(function(event){
     if (event.keyCode == 27) {   // escape
